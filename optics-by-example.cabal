@@ -1,0 +1,23 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           optics-by-example
+version:        0.1
+synopsis:       Code and Examples that accompany my reading of "Optics by example" book
+description:    This package provides the source code for examples and problems that accompany my reading of the book book "Opitcs By Example" by "Chris Penner". I intent to fill this repo as i read the book, with the things i find interesting.
+category:       Sample Code
+homepage:       https://github.com/arjunkathuria/optics-by-example#readme
+bug-reports:    https://github.com/arjunkathuria/optics-by-example/issues
+author:         Arjun Kathuria
+maintainer:     Arjun Kathuira
+license:        BSD3
+build-type:     Simple
+tested-with:
+    GHC == 9.2.3
+
+source-repository head
+  type: git
+  location: https://github.com/arjunkathuria/optics-by-example

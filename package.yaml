@@ -1,0 +1,35 @@
+name: optics-by-example
+version: 0.1
+synopsis: Code and Examples that accompany my reading of "Optics by example" book
+description:
+  This package provides the source code for examples and problems that
+  accompany my reading of the book book "Opitcs By Example" by "Chris Penner".
+  I intent to fill this repo as i read the book, with the things i find interesting.
+
+category: Sample Code
+license: BSD3
+author: Arjun Kathuria
+maintainer: Arjun Kathuira
+github: arjunkathuria/optics-by-example
+
+tested-with: GHC == 9.2.3
+
+dependencies:
+  - base >= 4.10 && < 5
+  - lens
+  - aeson
+  - containers
+  - lens
+  - lens-aeson
+  - mtl
+  - text
+
+default-extensions:
+  - TemplateHaskell
+  - FlexibleInstances
+  - FlexibleContexts
+  - RankNTypes
+  - ScopedTypeVariables
+  - TypeApplications
+  - TypeFamilies
+  - InstanceSigs
