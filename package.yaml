@@ -33,3 +33,14 @@ default-extensions:
   - TypeApplications
   - TypeFamilies
   - InstanceSigs
+
+language: Haskell2010
+
+ghc-options:
+  -threaded
+
+executables:
+
+  naive-lens:
+    source-dirs: chapter_03_Lenses
+    main: NaiveLens.hs
