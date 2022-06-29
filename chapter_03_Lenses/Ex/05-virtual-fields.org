@@ -1,0 +1,82 @@
+Exercise 05 - Virtual Fields
+
+(lenses for Fields that don't exist as actual fields in a record)
+
+0. Quess:
+
+   #+name: data-type
+   #+begin_src haskell
+     data User =
+       User { _firstName :: String
+            , _lastName :: String
+            , _username :: String
+            , _email :: String
+            } deriving (Show)
+
+     makeLenses ''User
+   #+end_src
+
+1. We’ve decided we’re no longer going to have separate usernames and emails; now the email
+   will be used in place of a username. Your task is to delete the _username field and write a
+   replacement username lens which reads and writes from/to the _email field instead. The change
+   should be unnoticed by those importing the module.
+
+   #+name: answer
+   #+begin_src haskell
+     {-# LANGUAGE TemplateHaskell #-}
+     import Control.Lens
+
+     data User =
+       User { _firstName :: String
+            , _lastName :: String
+            , _email :: String
+            } deriving (Show)
+
+     makeLenses ''User
+
+     username :: Lens' User String
+     username = lens getter setter
+       where
+         getter user = view email user
+         setter user uname = set email uname user
+
+  #+end_src
+
+
+2. Write a lens for the user’s fullName. It should append the first and last names when “getting”.
+   When “setting” treat everything till the first space as the first name, and everything following it as
+   the last name.
+   #+name: asnwer 2
+   #+begin_src haskell
+     {-# LANGUAGE TemplateHaskell #-}
+
+     import Control.Lens
+
+     data User =
+       User { _firstName :: String
+            , _lastName :: String
+            , _email :: String
+            } deriving (Show)
+
+     makeLenses ''User
+
+     fullName :: Lens' User String
+     fullName = lens getter setter
+       where
+         getter user = view firstName user <> " " <> view lastName user
+         setter user fullName = set lastName rest (set firstName fname user)
+           where
+             fname = takeWhile (/= ' ') fullName
+             rest = drop 1 $ dropWhile (/= ' ') fullName
+
+     let user = User "Izuku" "Midoriya" "deku@smaaash.com"
+
+     view fullName user  -- "Izuki Midoriya"
+     set fullName "Yennefer Of Vengaberg"
+     {-
+
+     User { _firstName="Yennefer"
+          , _lastName="Of Vengaberg"
+          , _email="deku@smaaash.com"}
+     -}
+   #+end_src
