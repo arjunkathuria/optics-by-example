@@ -1,0 +1,104 @@
+Exercise 06 - Self-Correcting Lenses
+
+#+name: data-type
+#+begin_src haskell
+  data ProducePrices =
+    ProducePrices { _limePrice :: Float
+                  , _lemonPrice :: Float
+                  } deriving Show
+#+end_src
+
+1. We’re handling a system for pricing our local grocery store’s citrus produce! Our first job
+   is to write lenses for setting the prices of limes and lemons. Write lenses for limePrice and
+   lemonPrice which prevent negative prices by rounding up to 0 (we’re okay with given produce
+   out for free, but certainly aren’t going to pay others to take it).
+
+   #+name: org-babel-haskell-formatter
+   #+begin_src emacs-lisp :var strr="" :exports code
+      (format "%s"
+              (replace-regexp-in-string
+               (rx line-start
+                   (+ (| alphanumeric blank "." "|" ">")))
+               "" (format "%s" strr)))
+   #+end_src
+    
+   #+name: answer-1
+   #+begin_src haskell :exports both :results output :post org-babel-haskell-formatter(*this*)
+     import Control.Lens
+
+     :{
+     data ProducePrices =
+       ProducePrices { _limePrice :: Float
+                     , _lemonPrice :: Float
+                     } deriving Show
+
+     lemonPrice :: Lens' ProducePrices Float
+     lemonPrice = lens getter setter
+       where
+         getter = _lemonPrice
+         setter producePrices newPrice = producePrices{_lemonPrice = max 0 newPrice}
+
+     limePrice :: Lens' ProducePrices Float
+     limePrice = lens getter setter
+       where
+         getter = _limePrice
+         setter producePrices newPrice = producePrices {_limePrice = max 0 newPrice}
+
+     pp = ProducePrices {_limePrice = 50, _lemonPrice = 51}
+
+     :}
+
+     view lemonPrice pp
+     set limePrice 69 pp
+   #+end_src
+
+   #+RESULTS: answer-1
+   : 51.0
+   : {_limePrice = 69.0, _lemonPrice = 51.0}
+
+
+2. The owner has informed us that it’s VERY important that the prices of limes and lemons must
+   NEVER be further than 50 cents apart or the produce world would descend into total chaos.
+   Update your lenses so that when setting lime-cost the lemon-cost is rounded to within 50 cents;
+   (and vice versa).
+
+   #+begin_src haskell :exports both :results value 
+     import Control.Lens
+       
+     {:
+     data ProducePrices = ProducePrices
+       { _limePrice :: Float,
+         _lemonPrice :: Float
+       }
+       deriving (Show)
+
+     clamp :: (Ord a, Num a) => a -> a -> a -> a
+     clamp mmin mmax = max mmin . min mmax
+
+     lemonPrice :: Lens' ProducePrices Float
+     lemonPrice = lens getter setter
+       where
+         getter = _lemonPrice
+         setter pprices newPrice = pprices {_lemonPrice = adjustedNewPrice}
+           where
+             lime = view limePrice pprices
+             adjustedNewPrice = clamp (lime - 0.5) (lime + 0.5) newPrice
+
+
+     limePrice :: Lens' ProducePrices Float
+     limePrice = lens getter setter
+       where
+         getter = _limePrice
+         setter pprices newPrice = pprices {_limePrice = adjustedNewPrice}
+           where
+             lemon = view lemonPrice pprices
+             adjustedNewPrice = clamp (lemon - 0.5) (lemon + 0.5) newPrice
+     :}
+
+     pp :: ProducePrices
+     pp = ProducePrices 68.5 68
+
+     set lemonPrice 100 pp -- 69.0, nice
+     set limePrice 0 pp --
+
+   #+end_src
