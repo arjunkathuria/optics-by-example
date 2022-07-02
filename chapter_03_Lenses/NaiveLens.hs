@@ -3,10 +3,10 @@ module NaiveLens where
 import Control.Lens
 
 data Ship = Ship
- { _name :: String
- , _numCrew :: Int
- } deriving (Show)
-
+  { _name :: String,
+    _numCrew :: Int
+  }
+  deriving (Show)
 
 -- lens :: (s -> a) -> (s -> b -> t) -> Lens s t a b
 -- lens :: (s -> a) -> (s -> a -> s) -> Lens' s a
@@ -25,7 +25,6 @@ setNumCrew ship newNumCrew = ship {_numCrew = newNumCrew}
 
 numCrew :: Lens' Ship Int
 numCrew = lens getNumCrew setNumCrew
-
 
 -- Repeat this for name
 
