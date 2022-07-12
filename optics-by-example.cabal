@@ -25,7 +25,6 @@ source-repository head
 executable naive-lens
   main-is: NaiveLens.hs
   other-modules:
-      Lol
       Paths_optics_by_example
   hs-source-dirs:
       chapter_03_Lenses
