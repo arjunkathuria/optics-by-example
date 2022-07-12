@@ -1,0 +1,85 @@
+Exercise 1 "Polymorphic Lenses" of chatper 4 - Polymorphic optics
+
+1. Quess 1.
+
+   Write the type signature of the polymorphic lens which would allow changing a
+   ~Vorpal x~ to a ~Vorpal y~
+
+   #+begin_src haskell
+     vorpal :: Lens (Vorpal x) (Vorpal y) x y
+   #+end_src
+
+   
+2. Quess 2.
+
+   Find one possible way to write a polymorphic lens which changes the type of the best and
+   worst fields in the Preferences type below. You’re allowed to change the type of the lenses or
+   alter the type itself !
+
+   #+begin_src haskell
+     data Preferences a =
+       Preferences { _best :: a
+                   , _worst :: a
+                   }
+       deriving (Show)
+   #+end_src
+
+   Answer:
+   
+   1. direct way
+
+   #+begin_src haskell
+     data Preferences a b =
+       Preferences { _best :: a
+                   , _worst :: b
+                   }
+       deriving (Show)
+
+     best = Lens (Preferences a b) (Preferences a' b) a a'
+     worst = Lens (Preferences a b) (Preferences a b') b b'
+   #+end_src
+
+   2. round-about way
+
+      The main issue is here that a Lens can focus on only one thing!
+      
+      we represent best and worst as elements of a tuple and modify them that way.
+      This way, a lens still has 1 focus, but that element is made up of 2 values.
+      #+begin_src haskell
+        Preferences a = Preferences (a, a)
+
+        preferences :: Lens (Preferences a) (Preferences b)  (a, a) (b, b)
+      #+end_src
+
+3. Quess 3.
+
+   We can change type of more complex types too. What is the type of a lens which could change
+   the type variable here:
+
+   #+begin_src haskell
+     data Result e =
+       Result { _lineNumber :: Int
+              , _result :: Either e String
+              }
+   #+end_src
+
+   Answer.
+
+   #+begin_src haskell
+     result :: Lens (Result e) (Result f) (Either e String) (Either f String)
+   #+end_src
+
+   
+5. Quess 5.
+   BONUS Come up with some sort of lens to change from a Predicate a to a Predicate b
+
+   #+begin_src haskell
+     data Predicate a =
+       Predicate (a -> Bool)
+   #+end_src
+
+   Answer:
+
+   #+begin_src haskell
+     pred :: Lens (Predicate a) (Predicate b) (a -> Bool) (b -> Bool)
+   #+end_src
