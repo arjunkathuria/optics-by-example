@@ -1,0 +1,65 @@
+Exercise 2 "Lens Composition" of chatper 4 - Polymorphic optics
+
+1. Quess 1.
+   
+   Fill in the blank with the appropriate composition of tuple lenses in the following statement:
+   
+   #+begin_example 
+     >>> view _ ("Ginerva", (("Galileo", "Waldo"), "Malfoy"))
+     "Waldo"
+   #+end_example
+
+   Answer:
+   
+   #+begin_src haskell
+     import Control.Lens
+
+     let structure = ("Ginerva", (("Galileo", "Waldo"), "Malfoy")) in
+       view (_2 . _1 . _2) structure
+   #+end_src
+
+   #+RESULTS:
+   : Waldo
+
+   
+2. Quess 2.
+
+   Given the following lens types, fill in the missing type of mysteryDomino
+
+   #+begin_src haskell
+     fiveEightDomino :: Lens' Five Eight
+     mysteryDomino :: Lens' ???? ????
+     twoThreeDomino :: Lens' Two Three
+       
+     dominoTrain :: Lens' Five Three
+     dominoTrain = fiveEightDomino . mysteryDomino . twoThreeDomino
+   #+end_src
+
+   Answer:
+   #+begin_src haskell
+     mysteryDomino :: Lens' Eight Two
+   #+end_src
+
+   
+3. Quess 3.
+
+   Using what you know about how lenses work under the hood; rewrite the following signature
+   as a polymorphic lens of the form: Lens s t a b. Then identify each animal as one of:
+   pre-action structure, post-action structure, pre-action focus, post-action focus
+
+   #+begin_src haskell
+     Functor f => (Armadillo -> f Hedgehog) -> (Platypus -> f BabySloth)
+   #+end_src
+
+   Answer:
+
+   #+begin_src haskell
+     animals :: Lens Platypus BabySloth Armadillo Hedgehog
+     --                <s>       <t>       <a>       <b>
+   #+end_src
+
+   - pre-action structure  - s - Platypus
+   - post-action structure - t - Babysloth
+   - pre-action focus      - a - Armadillo
+   - post-action focus     - b - Hedgehog  
+     
