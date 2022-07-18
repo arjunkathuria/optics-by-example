@@ -63,3 +63,35 @@ Exercise 2 "Lens Composition" of chatper 4 - Polymorphic optics
    - pre-action focus      - a - Armadillo
    - post-action focus     - b - Hedgehog  
      
+4. Quess 4.
+
+   Find a way to compose ALL of the following lenses together into one big path using each exactly once.
+   What’s the type of the resulting lens?
+
+   #+begin_src haskell
+     spuzorktrowmble :: Lens Chumble Spuzz Gazork Trowlg
+
+     gazorlglesnatchka :: Lens Gazork Trowlg Bandersnatch Yakka
+
+     zinkattumblezz :: Lens Zink Wattoom Chumble Spuzz
+
+     gruggazinkoom :: Lens Grug Pubbawup Zink Wattoom
+
+     banderyakoobog :: Lens Bandersnatch Yakka Foob Mog
+
+     boowockugwup :: Lens Boojum Jabberwock Grug Pubbawup
+
+     snajubjumwock :: Lens Snark JubJub Boojum Jabberwock
+   #+end_src
+
+   Answer.
+
+   #+begin_src haskell
+     snajubjumwock
+     . boowockugwup
+     . gruggazinkoom
+     . zinkattumblezz
+     . spuzorktrowmble
+     . gazorlglesnatchka
+     . banderyakoobog
+   #+end_src
